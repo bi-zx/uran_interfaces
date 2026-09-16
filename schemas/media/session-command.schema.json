@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:media:session-command:1.0",
+  "type": "object",
+  "required": ["schema_version", "operation_id", "target", "session_id", "action", "protocol", "timestamp_ns"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "operation_id": {"type": "string", "minLength": 1},
+    "target": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "session_id": {"type": "string", "minLength": 1},
+    "action": {"enum": ["start", "stop", "switch", "record_start", "record_stop"]},
+    "protocol": {"enum": ["webrtc", "rtsp"]},
+    "channel_id": {"type": "string"},
+    "signal": {
+      "type": "object",
+      "properties": {
+        "sdp": {"type": "string"},
+        "ice_candidates": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "timestamp_ns": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}

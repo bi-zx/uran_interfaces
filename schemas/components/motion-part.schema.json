@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:components:motion-part:1.0",
+  "title": "Motion part descriptor",
+  "type": "object",
+  "required": ["schema_version", "device_id", "component_id", "kind", "resource_group", "capabilities"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "device_id": {"type": "string", "minLength": 1},
+    "component_id": {"type": "string", "minLength": 1},
+    "parent_component_id": {"type": "string", "minLength": 1},
+    "kind": {"enum": ["locomotion", "manipulator", "gripper", "aerial"]},
+    "frame_id": {"type": "string"},
+    "resource_group": {"type": "string", "minLength": 1},
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false
+}
+

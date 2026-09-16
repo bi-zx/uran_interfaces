@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:tasks:route:1.0",
+  "type": "object",
+  "required": ["schema_version", "route_id", "frame_id", "waypoints"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "route_id": {"type": "string", "minLength": 1},
+    "frame_id": {"type": "string", "minLength": 1},
+    "waypoints": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["waypoint_id", "position_m"],
+        "properties": {
+          "waypoint_id": {"type": "string", "minLength": 1},
+          "position_m": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+          "yaw_rad": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

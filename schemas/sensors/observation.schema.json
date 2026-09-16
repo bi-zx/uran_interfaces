@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:sensors:observation:1.0",
+  "type": "object",
+  "required": ["schema_version", "source", "observation_type", "timestamp_ns", "value"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "source": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "observation_type": {"type": "string", "minLength": 1},
+    "timestamp_ns": {"type": "integer", "minimum": 0},
+    "frame_id": {"type": "string"},
+    "unit": {"type": "string"},
+    "value": {},
+    "quality": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "additionalProperties": false
+}

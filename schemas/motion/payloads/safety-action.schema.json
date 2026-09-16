@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:motion:safety-action:1.0",
+  "type": "object",
+  "required": ["kind", "action"],
+  "properties": {
+    "kind": {"const": "safety_action"},
+    "action": {"enum": ["stop", "emergency_stop", "stand", "sit", "takeoff", "land", "return_home"]},
+    "reason": {"type": "string"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,2 @@
+{"schema_version":"1.0","operation_id":"bad","target":{"device_id":"robot_001","component_id":"base"},"controller":"cloud","sequence":1,"issued_at_ns":20,"valid_until_ns":10,"payload":{"kind":"base_velocity","frame_id":"base_link","linear_mps":{"x":0,"y":0,"z":0},"angular_rps":{"x":0,"y":0,"z":0}}}
+

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:components:control-lease:1.0",
+  "title": "Component-scoped control lease",
+  "type": "object",
+  "required": ["schema_version", "lease_id", "resource", "owner", "priority", "acquired_at_ns", "expires_at_ns"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "lease_id": {"type": "string", "minLength": 1},
+    "resource": {
+      "type": "object",
+      "required": ["device_id", "component_id", "resource_group"],
+      "properties": {
+        "device_id": {"type": "string", "minLength": 1},
+        "component_id": {"type": "string", "minLength": 1},
+        "resource_group": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "owner": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "reason": {"type": "string"},
+    "priority": {"type": "integer", "minimum": 0},
+    "acquired_at_ns": {"type": "integer", "minimum": 0},
+    "expires_at_ns": {"type": "integer", "minimum": 1}
+  },
+  "additionalProperties": false
+}

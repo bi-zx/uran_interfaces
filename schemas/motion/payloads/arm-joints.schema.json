@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:motion:arm-joints:1.0",
+  "type": "object",
+  "required": ["kind", "joint_names", "positions_rad"],
+  "properties": {
+    "kind": {"const": "arm_joints"},
+    "joint_names": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "positions_rad": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+    "duration_ms": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}
+

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:motion:base-velocity:1.0",
+  "type": "object",
+  "required": ["kind", "frame_id", "linear_mps", "angular_rps"],
+  "properties": {
+    "kind": {"const": "base_velocity"},
+    "frame_id": {"type": "string", "minLength": 1},
+    "linear_mps": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}},
+      "additionalProperties": false
+    },
+    "angular_rps": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

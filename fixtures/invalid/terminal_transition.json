@@ -1,0 +1,2 @@
+{"schema_version":"1.0","events":[{"schema_version":"1.0","operation_id":"bad","target":{"device_id":"robot_001","component_id":"base"},"sequence":0,"phase":"accepted","timestamp_ns":1},{"schema_version":"1.0","operation_id":"bad","target":{"device_id":"robot_001","component_id":"base"},"sequence":1,"phase":"succeeded","timestamp_ns":2},{"schema_version":"1.0","operation_id":"bad","target":{"device_id":"robot_001","component_id":"base"},"sequence":2,"phase":"running","timestamp_ns":3}]}
+

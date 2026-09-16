@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:motion:command:1.0",
+  "title": "Typed motion operation request",
+  "type": "object",
+  "required": ["schema_version", "operation_id", "target", "controller", "sequence", "issued_at_ns", "valid_until_ns", "payload"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "operation_id": {"type": "string", "minLength": 1},
+    "target": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "controller": {"type": "string", "minLength": 1},
+    "sequence": {"type": "integer", "minimum": 0},
+    "lease_id": {"type": "string", "minLength": 1},
+    "issued_at_ns": {"type": "integer", "minimum": 0},
+    "valid_until_ns": {"type": "integer", "minimum": 1},
+    "payload": {
+      "oneOf": [
+        {"$ref": "urn:uran:interfaces:motion:base-velocity:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:base-posture:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:arm-joints:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:arm-pose:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:gripper-position:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:safety-action:1.0"}
+      ]
+    },
+    "metadata": {"type": "object"}
+  },
+  "additionalProperties": false
+}

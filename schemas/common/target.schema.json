@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:common:target:1.0",
+  "title": "URAN component target",
+  "type": "object",
+  "required": ["device_id", "component_id"],
+  "properties": {
+    "device_id": {"type": "string", "minLength": 1},
+    "component_id": {"type": "string", "minLength": 1},
+    "instance_id": {"type": "string", "minLength": 1},
+    "capability_id": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}
+

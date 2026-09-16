@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:motion:base-posture:1.0",
+  "type": "object",
+  "required": ["kind", "roll_rad", "pitch_rad", "yaw_rad"],
+  "properties": {
+    "kind": {"const": "base_posture"},
+    "roll_rad": {"type": "number"},
+    "pitch_rad": {"type": "number"},
+    "yaw_rad": {"type": "number"}
+  },
+  "additionalProperties": false
+}
+

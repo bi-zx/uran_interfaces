@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "events": [
+    {"schema_version": "1.0", "operation_id": "op-arm-1", "target": {"device_id": "robot_001", "component_id": "arm_left"}, "sequence": 0, "phase": "accepted", "timestamp_ns": 100, "cancellable": true},
+    {"schema_version": "1.0", "operation_id": "op-arm-1", "target": {"device_id": "robot_001", "component_id": "arm_left"}, "sequence": 1, "phase": "running", "timestamp_ns": 200, "progress": 0.4, "cancellable": true},
+    {"schema_version": "1.0", "operation_id": "op-arm-1", "target": {"device_id": "robot_001", "component_id": "arm_left"}, "sequence": 2, "phase": "cancelled", "timestamp_ns": 300, "code": "requested", "message": "cancel acknowledged"}
+  ]
+}
+

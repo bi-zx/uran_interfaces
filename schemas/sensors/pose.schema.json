@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:sensors:pose:1.0",
+  "type": "object",
+  "required": ["schema_version", "source", "timestamp_ns", "pose_type", "frame_id", "position_m", "orientation_xyzw"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "source": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "timestamp_ns": {"type": "integer", "minimum": 0},
+    "pose_type": {"enum": ["geographic", "visual_odometry", "odometry"]},
+    "frame_id": {"type": "string", "minLength": 1},
+    "position_m": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+    "orientation_xyzw": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+    "quality": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "additionalProperties": false
+}

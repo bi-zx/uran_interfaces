@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:sensors:gps-fix:1.0",
+  "type": "object",
+  "required": ["schema_version", "source", "timestamp_ns", "status", "latitude_deg", "longitude_deg", "altitude_m"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "source": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "timestamp_ns": {"type": "integer", "minimum": 0},
+    "status": {"enum": ["no_fix", "fix", "sbps", "gbas"]},
+    "latitude_deg": {"type": "number", "minimum": -90, "maximum": 90},
+    "longitude_deg": {"type": "number", "minimum": -180, "maximum": 180},
+    "altitude_m": {"type": "number"},
+    "quality": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "additionalProperties": false
+}

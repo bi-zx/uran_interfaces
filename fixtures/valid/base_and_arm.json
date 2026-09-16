@@ -1,0 +1,33 @@
+{
+  "base": {
+    "schema_version": "1.0",
+    "operation_id": "op-base-1",
+    "target": {"device_id": "robot_001", "component_id": "base", "capability_id": "motion.base.velocity"},
+    "controller": "field",
+    "sequence": 1,
+    "issued_at_ns": 1000000000,
+    "valid_until_ns": 1500000000,
+    "payload": {
+      "kind": "base_velocity",
+      "frame_id": "base_link",
+      "linear_mps": {"x": 0.25, "y": 0.0, "z": 0.0},
+      "angular_rps": {"x": 0.0, "y": 0.0, "z": 0.2}
+    }
+  },
+  "arm": {
+    "schema_version": "1.0",
+    "operation_id": "op-arm-1",
+    "target": {"device_id": "robot_001", "component_id": "arm_left", "capability_id": "motion.arm.joints"},
+    "controller": "task:pick-42",
+    "sequence": 2,
+    "issued_at_ns": 1000000000,
+    "valid_until_ns": 5000000000,
+    "payload": {
+      "kind": "arm_joints",
+      "joint_names": ["shoulder", "elbow"],
+      "positions_rad": [0.2, 0.8],
+      "duration_ms": 1000
+    }
+  }
+}
+

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:tasks:command:1.0",
+  "type": "object",
+  "required": ["schema_version", "operation_id", "task_id", "target", "action", "task_type", "timestamp_ns"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "operation_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "target": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "action": {"enum": ["start", "pause", "resume", "stop", "update_params"]},
+    "task_type": {"type": "string", "minLength": 1},
+    "parameters": {"type": "object"},
+    "timestamp_ns": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,5 @@
+[
+  {"schema_version": "1.0", "lease_id": "lease-base", "resource": {"device_id": "robot_001", "component_id": "base", "resource_group": "base-motion"}, "owner": "field", "reason": "teleoperation", "priority": 10, "acquired_at_ns": 100, "expires_at_ns": 1000},
+  {"schema_version": "1.0", "lease_id": "lease-arm", "resource": {"device_id": "robot_001", "component_id": "arm_left", "resource_group": "arm-motion"}, "owner": "task", "task_id": "pick-42", "priority": 5, "acquired_at_ns": 100, "expires_at_ns": 5000}
+]
+

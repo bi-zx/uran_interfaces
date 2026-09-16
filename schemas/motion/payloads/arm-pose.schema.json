@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:motion:arm-pose:1.0",
+  "type": "object",
+  "required": ["kind", "frame_id", "position_m", "orientation_xyzw"],
+  "properties": {
+    "kind": {"const": "arm_pose"},
+    "frame_id": {"type": "string", "minLength": 1},
+    "position_m": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+    "orientation_xyzw": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+    "duration_ms": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}
+

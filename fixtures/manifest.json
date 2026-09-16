@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "cases": [
+    {"file": "valid/base_and_arm.json", "pointer": "/base", "schema": "motion/command.schema.json", "valid": true},
+    {"file": "valid/base_and_arm.json", "pointer": "/arm", "schema": "motion/command.schema.json", "valid": true},
+    {"file": "valid/operation_cancelled.json", "schema": "operations/timeline.schema.json", "valid": true},
+    {"file": "valid/control_leases.json", "pointer": "/0", "schema": "components/control-lease.schema.json", "valid": true},
+    {"file": "valid/control_leases.json", "pointer": "/1", "schema": "components/control-lease.schema.json", "valid": true},
+    {"file": "invalid/expired_command.json", "schema": "motion/command.schema.json", "valid": false},
+    {"file": "invalid/terminal_transition.json", "schema": "operations/timeline.schema.json", "valid": false}
+  ]
+}
+
