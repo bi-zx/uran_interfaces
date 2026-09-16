@@ -10,4 +10,3 @@
     {"file": "invalid/terminal_transition.json", "schema": "operations/timeline.schema.json", "valid": false}
   ]
 }
-

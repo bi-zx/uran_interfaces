@@ -17,8 +17,16 @@
       "required": ["x", "y", "z"],
       "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}},
       "additionalProperties": false
+    },
+    "posture_rad": {
+      "type": "object",
+      "properties": {
+        "roll": {"type": "number"},
+        "pitch": {"type": "number"},
+        "yaw": {"type": "number"}
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
 }
-

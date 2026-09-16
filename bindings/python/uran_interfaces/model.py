@@ -133,4 +133,3 @@ def motion_command(
     if lease_id:
         result["lease_id"] = lease_id
     return result
-

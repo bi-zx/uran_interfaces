@@ -190,9 +190,9 @@ void validate_semantics(const std::string & name, const Json & document, Issues 
       const auto current_sequence = event.value("sequence", std::uint64_t{0});
       if (!first && current_sequence <= sequence) {add(issues, "/events", "sequence must increase");}
       try {
-        const auto current = operation_phase_from_string(event.value("phase", ""));
+        const auto current = operation_phase_from_string(event.value("status", ""));
         if (first && current != OperationPhase::accepted && current != OperationPhase::rejected) {
-          add(issues, "/events/0/phase", "timeline must begin with accepted or rejected");
+          add(issues, "/events/0/status", "timeline must begin with accepted or rejected");
         } else if (!first && !can_transition(previous, current)) {
           add(issues, "/events", "invalid operation phase transition");
         }
@@ -266,7 +266,7 @@ bool ComponentTarget::operator==(const ComponentTarget & other) const noexcept
 Json OperationEvent::to_json() const
 {
   Json document{{"schema_version", "1.0"}, {"operation_id", operation_id},
-    {"target", target.to_json()}, {"sequence", sequence}, {"phase", uran_interfaces::to_string(phase)},
+    {"target", target.to_json()}, {"sequence", sequence}, {"status", uran_interfaces::to_string(phase)},
     {"timestamp_ns", timestamp_ns}, {"cancellable", cancellable}};
   if (has_progress) {document["progress"] = progress;}
   if (!code.empty()) {document["code"] = code;}
@@ -281,7 +281,7 @@ OperationEvent OperationEvent::from_json(const Json & document)
   result.operation_id = document.at("operation_id");
   result.target = ComponentTarget::from_json(document.at("target"));
   result.sequence = document.at("sequence");
-  result.phase = operation_phase_from_string(document.at("phase"));
+  result.phase = operation_phase_from_string(document.at("status"));
   result.timestamp_ns = document.at("timestamp_ns");
   result.has_progress = document.contains("progress");
   result.progress = document.value("progress", 0.0);

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:operations:state:1.0",
+  "title": "Operation lifecycle state",
+  "type": "object",
+  "required": ["schema_version", "operation_id", "target", "sequence", "status", "timestamp_ns"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "operation_id": {"type": "string", "minLength": 1},
+    "target": {"$ref": "urn:uran:interfaces:common:target:1.0"},
+    "sequence": {"type": "integer", "minimum": 1, "maximum": 18446744073709551615},
+    "status": {"enum": ["accepted", "running", "succeeded", "failed", "cancelled", "rejected"]},
+    "timestamp_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "progress": {"type": "number", "minimum": 0, "maximum": 1},
+    "cancellable": {"type": "boolean"},
+    "code": {"type": "string"},
+    "message": {"type": "string"},
+    "result": {},
+    "payload": {"type": "object"},
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string"},
+        "message": {"type": "string"},
+        "retryable": {"type": "boolean"},
+        "details": {}
+      },
+      "required": ["code", "message"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

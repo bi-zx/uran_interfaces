@@ -47,6 +47,18 @@ def test_operation_timeline_and_terminal_rules():
     assert not can_transition(OperationPhase.SUCCEEDED, OperationPhase.RUNNING)
 
 
+def test_typed_operation_state_matches_authoritative_schema():
+    event = {
+        "schema_version": "1.0",
+        "operation_id": "op-typed",
+        "target": ComponentTarget("robot_001", "base").to_dict(),
+        "sequence": 1,
+        "status": OperationPhase.ACCEPTED.value,
+        "timestamp_ns": 100,
+    }
+    VALIDATOR.validate("operations/state.schema.json", event)
+
+
 def test_control_leases_are_component_scoped():
     leases = json.loads((ROOT / "fixtures/valid/control_leases.json").read_text())
     for lease in leases:

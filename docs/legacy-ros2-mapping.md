@@ -12,9 +12,11 @@ behavior while the typed contract remains authoritative.
 | adapter sequence counter | `sequence` (legacy message has no sequence) |
 | `linear_vel_x/y/z` | `payload.linear_mps.x/y/z` |
 | `angular_vel_z` | `payload.angular_rps.z`; x/y are zero |
-| `target_roll/pitch/yaw` | a separate `base_posture` request when finite and requested |
+| `target_roll/pitch/yaw` | optional `base_velocity.payload.posture_rad`, preserving old combined servo commands; standalone new posture operations use `base_posture` |
 | `action` | `safety_action.action`; unknown vendor actions are rejected, not passed through |
-| `extra_json` | `metadata.legacy_extra`; never interpreted as a typed hardware command |
+| `extra_json.motion_id` | `metadata.motion_id` for the migrated CyberDog policy |
+| `extra_json.source_pkg` | `metadata.source` for control ownership attribution |
+| remaining `extra_json` | `metadata.legacy_extra`; never interpreted as a typed hardware command |
 | `TaskCtrlCmd.task_id/type/action` | `task_id/task_type/action` |
 | `TaskCtrlCmd.task_params_json` | parsed `parameters`; malformed JSON is rejected |
 | `MediaCtrlCmd.action/protocol/channel_id` | same fields plus adapter-created `session_id` and `operation_id` |
@@ -30,4 +32,3 @@ Legacy `ModeSwitchCmd` is an input to a control-arbiter implementation. It does
 not itself grant a lease. The arbiter publishes a
 `components/control-lease.schema.json` document scoped to the selected
 component/resource group.
-

@@ -62,13 +62,13 @@ int main()
   Json timeline = {{"schema_version", "1.0"}, {"events", Json::array({
     Json{{"schema_version", "1.0"}, {"operation_id", "op-1"},
       {"target", {{"device_id", "robot_001"}, {"component_id", "base"}}},
-      {"sequence", 0}, {"phase", "accepted"}, {"timestamp_ns", 1}},
+      {"sequence", 1}, {"status", "accepted"}, {"timestamp_ns", 1}},
     Json{{"schema_version", "1.0"}, {"operation_id", "op-1"},
       {"target", {{"device_id", "robot_001"}, {"component_id", "base"}}},
-      {"sequence", 1}, {"phase", "running"}, {"timestamp_ns", 2}},
+      {"sequence", 2}, {"status", "running"}, {"timestamp_ns", 2}},
     Json{{"schema_version", "1.0"}, {"operation_id", "op-1"},
       {"target", {{"device_id", "robot_001"}, {"component_id", "base"}}},
-      {"sequence", 2}, {"phase", "cancelled"}, {"timestamp_ns", 3}}
+      {"sequence", 3}, {"status", "cancelled"}, {"timestamp_ns", 3}}
   })}};
   validator.validate_or_throw("operations/timeline.schema.json", timeline);
   require(uran_interfaces::can_transition(OperationPhase::running, OperationPhase::cancelled),

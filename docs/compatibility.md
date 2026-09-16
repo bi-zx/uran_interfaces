@@ -9,9 +9,11 @@ containers. An adapter maps `message_type` to a schema and places the complete
 contract JSON in `payload`; `DownlinkEnvelope.target` must agree with the
 contract `target`. A transport success means the message was routed. Only an
 operation event with phase `accepted` means the provider accepted work, and
-only `succeeded`, `failed`, `cancelled`, or `rejected` is terminal.
+only `succeeded`, `failed`, `cancelled`, or `rejected` is terminal. Worker and
+adapter event transport uses message type `uran.operations.state.v1` and the
+schema field `status`; the code binding calls the same value `OperationPhase`
+to avoid confusing a whole state document with its enum value.
 
 This repository defines no vendor-specific safety behavior. In particular,
 `emergency_stop` is a typed intent whose physical action belongs to the device
 plugin and must be hardware tested there.
-

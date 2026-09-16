@@ -82,7 +82,7 @@ class ContractValidator:
                     raise ContractError("all timeline events must identify the same operation and target")
                 if event["sequence"] <= previous_sequence:
                     raise ContractError("timeline event sequence must increase")
-                phase = OperationPhase(event["phase"])
+                phase = OperationPhase(event["status"])
                 if previous is None and phase not in {OperationPhase.ACCEPTED, OperationPhase.REJECTED}:
                     raise ContractError("an operation timeline must begin with accepted or rejected")
                 if previous is not None and not can_transition(previous, phase):
