@@ -18,7 +18,8 @@ add_library(${PROJECT_NAME} SHARED src/contracts.cpp)
 add_dependencies(${PROJECT_NAME} uran_interfaces_generate_catalog)
 add_library(uran_interfaces::uran_interfaces ALIAS ${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-target_compile_definitions(${PROJECT_NAME} PRIVATE URAN_INTERFACES_SCHEMA_DIR="${CMAKE_INSTALL_FULL_DATADIR}/uran_interfaces/schemas")
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+  URAN_INTERFACES_INSTALLED_SCHEMA_DIR="${CMAKE_INSTALL_FULL_DATADIR}/uran_interfaces/schemas")
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated>

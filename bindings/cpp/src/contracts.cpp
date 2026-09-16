@@ -344,6 +344,6 @@ void ContractValidator::validate_or_throw(const std::string & schema_name, const
 std::filesystem::path default_schema_directory()
 {
   if (const char * configured = std::getenv("URAN_INTERFACES_SCHEMA_DIR")) {return configured;}
-  return URAN_INTERFACES_SCHEMA_DIR;
+  return URAN_INTERFACES_INSTALLED_SCHEMA_DIR;
 }
 }  // namespace uran_interfaces
