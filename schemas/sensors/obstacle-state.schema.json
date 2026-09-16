@@ -6,7 +6,7 @@
   "properties": {
     "schema_version": {"const": "1.0"},
     "source": {"$ref": "urn:uran:interfaces:common:target:1.0"},
-    "timestamp_ns": {"type": "integer", "minimum": 0},
+    "timestamp_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
     "frame_id": {"type": "string", "minLength": 1},
     "blocked": {"type": "boolean"},
     "nearest_distance_m": {"type": "number", "minimum": 0},

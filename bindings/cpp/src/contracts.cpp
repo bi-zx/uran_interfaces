@@ -7,6 +7,9 @@
 #include <set>
 #include <sstream>
 #include <stdexcept>
+#if defined(__unix__) || defined(__APPLE__)
+#include <dlfcn.h>
+#endif
 
 namespace uran_interfaces
 {
@@ -141,12 +144,12 @@ void validate_node(const Json & schema, const Json & value,
     add(issues, path, "string is too short");
   }
   if (value.is_number() && !value.is_boolean()) {
-    const double number = value.get<double>();
+    const long double number = value.get<long double>();
     if (!std::isfinite(number)) {add(issues, path, "number must be finite");}
-    if (schema.contains("minimum") && number < schema.at("minimum").get<double>()) {
+    if (schema.contains("minimum") && number < schema.at("minimum").get<long double>()) {
       add(issues, path, "number is below minimum");
     }
-    if (schema.contains("maximum") && number > schema.at("maximum").get<double>()) {
+    if (schema.contains("maximum") && number > schema.at("maximum").get<long double>()) {
       add(issues, path, "number is above maximum");
     }
   }
@@ -184,7 +187,7 @@ void validate_semantics(const std::string & name, const Json & document, Issues 
         add(issues, "/events", "all events must identify the same operation and target");
         break;
       }
-      const auto current_sequence = event.value("sequence", 0U);
+      const auto current_sequence = event.value("sequence", std::uint64_t{0});
       if (!first && current_sequence <= sequence) {add(issues, "/events", "sequence must increase");}
       try {
         const auto current = operation_phase_from_string(event.value("phase", ""));
@@ -344,6 +347,16 @@ void ContractValidator::validate_or_throw(const std::string & schema_name, const
 std::filesystem::path default_schema_directory()
 {
   if (const char * configured = std::getenv("URAN_INTERFACES_SCHEMA_DIR")) {return configured;}
-  return URAN_INTERFACES_INSTALLED_SCHEMA_DIR;
+#if defined(__unix__) || defined(__APPLE__)
+  Dl_info information{};
+  if (dladdr(reinterpret_cast<const void *>(&default_schema_directory), &information) != 0 &&
+    information.dli_fname != nullptr) {
+    const auto library = std::filesystem::canonical(information.dli_fname);
+    const auto candidate = library.parent_path().parent_path() / "share/uran_interfaces/schemas";
+    if (std::filesystem::is_directory(candidate)) {return candidate;}
+  }
+#endif
+  throw std::runtime_error(
+          "cannot locate installed URAN schemas; set URAN_INTERFACES_SCHEMA_DIR");
 }
 }  // namespace uran_interfaces

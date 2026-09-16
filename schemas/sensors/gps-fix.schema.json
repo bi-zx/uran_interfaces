@@ -6,7 +6,7 @@
   "properties": {
     "schema_version": {"const": "1.0"},
     "source": {"$ref": "urn:uran:interfaces:common:target:1.0"},
-    "timestamp_ns": {"type": "integer", "minimum": 0},
+    "timestamp_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
     "status": {"enum": ["no_fix", "fix", "sbps", "gbas"]},
     "latitude_deg": {"type": "number", "minimum": -90, "maximum": 90},
     "longitude_deg": {"type": "number", "minimum": -180, "maximum": 180},

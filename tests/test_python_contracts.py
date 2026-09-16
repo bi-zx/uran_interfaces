@@ -103,14 +103,17 @@ def test_every_public_schema_rejects_non_finite_numbers(value):
         VALIDATOR.validate("motion/payloads/base-velocity.schema.json", payload)
 
 
-def test_large_integer_does_not_overflow_validator():
+def test_uint64_boundary_matches_cpp_binding():
     gps = {
         "schema_version": "1.0",
         "source": {"device_id": "robot_001", "component_id": "gps"},
-        "timestamp_ns": 10**1000,
+        "timestamp_ns": 2**64 - 1,
         "status": "fix",
         "latitude_deg": 31.2,
         "longitude_deg": 121.5,
         "altitude_m": 4.0,
     }
     VALIDATOR.validate("sensors/gps-fix.schema.json", gps)
+    gps["timestamp_ns"] = 2**64
+    with pytest.raises(ContractError, match="greater"):
+        VALIDATOR.validate("sensors/gps-fix.schema.json", gps)

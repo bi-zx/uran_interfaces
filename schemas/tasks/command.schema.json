@@ -11,7 +11,7 @@
     "action": {"enum": ["start", "pause", "resume", "stop", "update_params"]},
     "task_type": {"type": "string", "minLength": 1},
     "parameters": {"type": "object"},
-    "timestamp_ns": {"type": "integer", "minimum": 0}
+    "timestamp_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615}
   },
   "additionalProperties": false
 }

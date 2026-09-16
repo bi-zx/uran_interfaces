@@ -9,7 +9,7 @@
     "operation_id": {"type": "string", "minLength": 1},
     "target": {"$ref": "urn:uran:interfaces:common:target:1.0"},
     "requested_by": {"type": "string", "minLength": 1},
-    "timestamp_ns": {"type": "integer", "minimum": 0},
+    "timestamp_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
     "reason": {"type": "string"}
   },
   "additionalProperties": false

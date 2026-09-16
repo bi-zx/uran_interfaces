@@ -1,11 +1,19 @@
-#include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 #include <nlohmann/json.hpp>
 #include "uran_interfaces/contracts.hpp"
 #include "uran_interfaces/generated_catalog.hpp"
+
+namespace
+{
+void require(bool condition, const char * message)
+{
+  if (!condition) {throw std::runtime_error(message);}
+}
+}
 
 int main()
 {
@@ -13,7 +21,8 @@ int main()
   using uran_interfaces::OperationPhase;
   const auto root = std::filesystem::path(URAN_INTERFACES_TEST_SCHEMA_DIR);
   uran_interfaces::ContractValidator validator(root);
-  assert(validator.schema_names().size() == uran_interfaces::generated::kSchemas.size());
+  require(validator.schema_names().size() == uran_interfaces::generated::kSchemas.size(),
+    "generated catalog differs from schema directory");
   const auto fixtures = std::filesystem::path(URAN_INTERFACES_TEST_FIXTURE_DIR);
   std::ifstream manifest_stream(fixtures / "manifest.json");
   Json manifest;
@@ -26,7 +35,7 @@ int main()
       document = document.at(Json::json_pointer(item.at("pointer").get<std::string>()));
     }
     const auto issues = validator.validate(item.at("schema"), document);
-    assert(issues.empty() == item.at("valid").get<bool>());
+    require(issues.empty() == item.at("valid").get<bool>(), "fixture result differs from manifest");
   }
   Json command = {
     {"schema_version", "1.0"}, {"operation_id", "op-1"},
@@ -39,7 +48,8 @@ int main()
   validator.validate_or_throw("motion/command.schema.json", command);
   Json naked_payload = command.at("payload");
   naked_payload["linear_mps"]["x"] = std::numeric_limits<double>::quiet_NaN();
-  assert(!validator.validate("motion/payloads/base-velocity.schema.json", naked_payload).empty());
+  require(!validator.validate("motion/payloads/base-velocity.schema.json", naked_payload).empty(),
+    "NaN was accepted");
   Json gps = {{"schema_version", "1.0"},
     {"source", {{"device_id", "robot_001"}, {"component_id", "gps"}}},
     {"timestamp_ns", 123}, {"status", "fix"}, {"latitude_deg", 31.2},
@@ -47,7 +57,8 @@ int main()
   validator.validate_or_throw("sensors/gps-fix.schema.json", gps);
   Json invalid = command;
   invalid["valid_until_ns"] = 5;
-  assert(!validator.validate("motion/command.schema.json", invalid).empty());
+  require(!validator.validate("motion/command.schema.json", invalid).empty(),
+    "expired command was accepted");
   Json timeline = {{"schema_version", "1.0"}, {"events", Json::array({
     Json{{"schema_version", "1.0"}, {"operation_id", "op-1"},
       {"target", {{"device_id", "robot_001"}, {"component_id", "base"}}},
@@ -60,7 +71,8 @@ int main()
       {"sequence", 2}, {"phase", "cancelled"}, {"timestamp_ns", 3}}
   })}};
   validator.validate_or_throw("operations/timeline.schema.json", timeline);
-  assert(uran_interfaces::can_transition(OperationPhase::running, OperationPhase::cancelled));
-  assert(uran_interfaces::terminal(OperationPhase::cancelled));
+  require(uran_interfaces::can_transition(OperationPhase::running, OperationPhase::cancelled),
+    "running to cancelled transition was rejected");
+  require(uran_interfaces::terminal(OperationPhase::cancelled), "cancelled is not terminal");
   std::cout << "uran_interfaces contract tests passed\n";
 }

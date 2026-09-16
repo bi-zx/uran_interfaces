@@ -9,10 +9,10 @@
     "operation_id": {"type": "string", "minLength": 1},
     "target": {"$ref": "urn:uran:interfaces:common:target:1.0"},
     "controller": {"type": "string", "minLength": 1},
-    "sequence": {"type": "integer", "minimum": 0},
+    "sequence": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
     "lease_id": {"type": "string", "minLength": 1},
-    "issued_at_ns": {"type": "integer", "minimum": 0},
-    "valid_until_ns": {"type": "integer", "minimum": 1},
+    "issued_at_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "valid_until_ns": {"type": "integer", "minimum": 1, "maximum": 18446744073709551615},
     "payload": {
       "oneOf": [
         {"$ref": "urn:uran:interfaces:motion:base-velocity:1.0"},

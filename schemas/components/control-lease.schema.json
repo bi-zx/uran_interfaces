@@ -21,8 +21,8 @@
     "task_id": {"type": "string", "minLength": 1},
     "reason": {"type": "string"},
     "priority": {"type": "integer", "minimum": 0},
-    "acquired_at_ns": {"type": "integer", "minimum": 0},
-    "expires_at_ns": {"type": "integer", "minimum": 1}
+    "acquired_at_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "expires_at_ns": {"type": "integer", "minimum": 1, "maximum": 18446744073709551615}
   },
   "additionalProperties": false
 }
