@@ -1,5 +1,7 @@
 """Typed helpers for URAN contract documents."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Mapping

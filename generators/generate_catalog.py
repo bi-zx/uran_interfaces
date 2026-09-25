@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generate language-specific schema catalogs from the authoritative files."""
 
+from __future__ import annotations
+
 import argparse
 import json
 from pathlib import Path
@@ -56,4 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
