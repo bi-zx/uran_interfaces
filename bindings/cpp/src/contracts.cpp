@@ -16,9 +16,9 @@ namespace uran_interfaces
 namespace
 {
 using Issues = std::vector<ValidationIssue>;
-using Catalog = std::map<std::string, std::filesystem::path>;
+using Catalog = std::map<std::string, uran_interfaces_fs::path>;
 
-Json read_json(const std::filesystem::path & path)
+Json read_json(const uran_interfaces_fs::path & path)
 {
   std::ifstream stream(path);
   if (!stream) {
@@ -62,7 +62,7 @@ void reject_non_finite(const Json & value, const std::string & path, Issues & is
 }
 
 void validate_node(const Json & schema, const Json & value,
-  const std::filesystem::path & schema_path, const Catalog & catalog,
+  const uran_interfaces_fs::path & schema_path, const Catalog & catalog,
   const std::string & path, Issues & issues)
 {
   if (schema.contains("$ref")) {
@@ -72,8 +72,10 @@ void validate_node(const Json & schema, const Json & value,
       return;
     }
     auto found = catalog.find(reference);
+    // GCC 7's experimental filesystem lacks lexically_normal(); schema
+    // references in this catalog are already normalized relative paths.
     const auto target = found == catalog.end() ?
-      (schema_path.parent_path() / reference).lexically_normal() : found->second;
+      (schema_path.parent_path() / reference) : found->second;
     validate_node(read_json(target), value, target, catalog, path, issues);
     return;
   }
@@ -292,13 +294,14 @@ OperationEvent OperationEvent::from_json(const Json & document)
   return result;
 }
 
-ContractValidator::ContractValidator(std::filesystem::path root) : root_(std::move(root))
+ContractValidator::ContractValidator(uran_interfaces_fs::path root) : root_(std::move(root))
 {
-  if (!std::filesystem::is_directory(root_)) {
+  if (!uran_interfaces_fs::is_directory(root_)) {
     throw std::invalid_argument("schema root is not a directory: " + root_.string());
   }
-  for (const auto & entry : std::filesystem::recursive_directory_iterator(root_)) {
-    if (!entry.is_regular_file() || entry.path().filename().string().find(".schema.json") == std::string::npos) {
+  for (const auto & entry : uran_interfaces_fs::recursive_directory_iterator(root_)) {
+    if (!uran_interfaces_fs::is_regular_file(entry.path()) ||
+        entry.path().filename().string().find(".schema.json") == std::string::npos) {
       continue;
     }
     const auto schema = read_json(entry.path());
@@ -314,9 +317,13 @@ ContractValidator::ContractValidator(std::filesystem::path root) : root_(std::mo
 std::vector<std::string> ContractValidator::schema_names() const
 {
   std::vector<std::string> names;
-  for (const auto & entry : std::filesystem::recursive_directory_iterator(root_)) {
-    if (entry.is_regular_file() && entry.path().filename().string().find(".schema.json") != std::string::npos) {
-      names.push_back(std::filesystem::relative(entry.path(), root_).generic_string());
+  for (const auto & entry : uran_interfaces_fs::recursive_directory_iterator(root_)) {
+    if (uran_interfaces_fs::is_regular_file(entry.path()) &&
+        entry.path().filename().string().find(".schema.json") != std::string::npos) {
+      const auto root = root_.generic_string();
+      const auto full = entry.path().generic_string();
+      names.push_back(full.compare(0, root.size(), root) == 0 && full.size() > root.size() &&
+          full[root.size()] == '/' ? full.substr(root.size() + 1) : full);
     }
   }
   std::sort(names.begin(), names.end());
@@ -344,16 +351,16 @@ void ContractValidator::validate_or_throw(const std::string & schema_name, const
   if (!issues.empty()) {throw std::invalid_argument(issues.front().path + ": " + issues.front().message);}
 }
 
-std::filesystem::path default_schema_directory()
+uran_interfaces_fs::path default_schema_directory()
 {
   if (const char * configured = std::getenv("URAN_INTERFACES_SCHEMA_DIR")) {return configured;}
 #if defined(__unix__) || defined(__APPLE__)
   Dl_info information{};
   if (dladdr(reinterpret_cast<const void *>(&default_schema_directory), &information) != 0 &&
     information.dli_fname != nullptr) {
-    const auto library = std::filesystem::canonical(information.dli_fname);
+    const auto library = uran_interfaces_fs::canonical(information.dli_fname);
     const auto candidate = library.parent_path().parent_path() / "share/uran_interfaces/schemas";
-    if (std::filesystem::is_directory(candidate)) {return candidate;}
+    if (uran_interfaces_fs::is_directory(candidate)) {return candidate;}
   }
 #endif
   throw std::runtime_error(

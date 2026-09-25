@@ -1,15 +1,21 @@
 """Schema catalog and semantic validation."""
 
-from __future__ import annotations
-
 import json
 import math
 import os
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Dict, List, Mapping, Optional
 
-from jsonschema import Draft202012Validator
-from referencing import Registry, Resource
+try:
+    from jsonschema import Draft202012Validator
+except ImportError:
+    Draft202012Validator = None
+try:
+    from referencing import Registry, Resource
+except ImportError:
+    Registry = None
+    Resource = None
+from jsonschema import Draft7Validator, RefResolver
 
 from .model import OperationPhase, can_transition
 
@@ -32,10 +38,11 @@ def schema_root() -> Path:
 
 
 class ContractValidator:
-    def __init__(self, root: Path | None = None):
+    def __init__(self, root: Optional[Path] = None):
         self.root = (root or schema_root()).resolve()
-        self._schemas: dict[str, dict[str, Any]] = {}
+        self._schemas = {}  # type: Dict[str, Dict[str, Any]]
         resources = []
+        store = {}
         for path in self.root.rglob("*.schema.json"):
             schema = json.loads(path.read_text(encoding="utf-8"))
             relative = str(path.relative_to(self.root))
@@ -43,10 +50,13 @@ class ContractValidator:
             schema_id = schema.get("$id")
             if not schema_id:
                 raise ContractError(f"schema has no $id: {relative}")
-            resources.append((schema_id, Resource.from_contents(schema)))
-        self._registry = Registry().with_resources(resources)
+            store[schema_id] = schema
+            if Resource is not None:
+                resources.append((schema_id, Resource.from_contents(schema)))
+        self._registry = Registry().with_resources(resources) if Registry is not None else None
+        self._store = store
 
-    def schema_names(self) -> list[str]:
+    def schema_names(self) -> List[str]:
         return sorted(str(path.relative_to(self.root)) for path in self.root.rglob("*.schema.json"))
 
     def validate(self, schema_name: str, document: Mapping[str, Any]) -> None:
@@ -55,7 +65,11 @@ class ContractValidator:
             raise ContractError(f"unknown contract schema: {schema_name}")
         schema = self._schemas[schema_name]
         _reject_non_finite(document)
-        validator = Draft202012Validator(schema, registry=self._registry)
+        if Draft202012Validator is not None and self._registry is not None:
+            validator = Draft202012Validator(schema, registry=self._registry)
+        else:
+            resolver = RefResolver.from_schema(schema, store=self._store)
+            validator = Draft7Validator(schema, resolver=resolver)
         errors = sorted(validator.iter_errors(document), key=lambda item: list(item.path))
         if errors:
             error = errors[0]

@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """Generate language-specific schema catalogs from the authoritative files."""
 
-from __future__ import annotations
-
 import argparse
 import json
 from pathlib import Path
+from typing import List, Tuple
 
 GENERATOR_VERSION = "1.0.0"
 
 
-def catalog(schema_root: Path) -> list[tuple[str, str]]:
+def catalog(schema_root: Path) -> List[Tuple[str, str]]:
     result = []
     for path in sorted(schema_root.rglob("*.schema.json")):
         schema = json.loads(path.read_text(encoding="utf-8"))

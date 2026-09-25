@@ -1,7 +1,13 @@
 #pragma once
 
 #include <cstdint>
+#if __has_include(<filesystem>)
 #include <filesystem>
+namespace uran_interfaces_fs = std::filesystem;
+#else
+#include <experimental/filesystem>
+namespace uran_interfaces_fs = std::experimental::filesystem;
+#endif
 #include <map>
 #include <string>
 #include <vector>
@@ -66,16 +72,16 @@ struct ValidationIssue
 class ContractValidator
 {
 public:
-  explicit ContractValidator(std::filesystem::path schema_root);
+  explicit ContractValidator(uran_interfaces_fs::path schema_root);
   std::vector<std::string> schema_names() const;
   std::vector<ValidationIssue> validate(
     const std::string & schema_name, const Json & document) const;
   void validate_or_throw(const std::string & schema_name, const Json & document) const;
 
 private:
-  std::filesystem::path root_;
-  std::map<std::string, std::filesystem::path> schemas_by_id_;
+  uran_interfaces_fs::path root_;
+  std::map<std::string, uran_interfaces_fs::path> schemas_by_id_;
 };
 
-std::filesystem::path default_schema_directory();
+uran_interfaces_fs::path default_schema_directory();
 }  // namespace uran_interfaces

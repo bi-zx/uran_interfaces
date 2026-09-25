@@ -1,10 +1,8 @@
 """Typed helpers for URAN contract documents."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Mapping
+from typing import Any, Dict, Mapping, Union
 
 
 class OperationPhase(str, Enum):
@@ -53,7 +51,7 @@ class ComponentTarget:
     instance_id: str = ""
     capability_id: str = ""
 
-    def to_dict(self) -> dict[str, str]:
+    def to_dict(self) -> Dict[str, str]:
         result = {"device_id": self.device_id, "component_id": self.component_id}
         if self.instance_id:
             result["instance_id"] = self.instance_id
@@ -70,7 +68,7 @@ class BaseVelocity:
     angular_z_rps: float = 0.0
     frame_id: str = "base_link"
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "kind": "base_velocity",
             "frame_id": self.frame_id,
@@ -89,7 +87,7 @@ class BasePosture:
     pitch_rad: float
     yaw_rad: float
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "kind": "base_posture",
             "roll_rad": self.roll_rad,
@@ -103,7 +101,7 @@ class MotionAction:
     action: str
     reason: str = ""
 
-    def to_dict(self) -> dict[str, str]:
+    def to_dict(self) -> Dict[str, str]:
         result = {"kind": "safety_action", "action": self.action}
         if self.reason:
             result["reason"] = self.reason
@@ -118,11 +116,11 @@ def motion_command(
     sequence: int,
     issued_at_ns: int,
     valid_until_ns: int,
-    payload: Mapping[str, Any] | BaseVelocity | BasePosture | MotionAction,
+    payload: Union[Mapping[str, Any], BaseVelocity, BasePosture, MotionAction],
     lease_id: str = "",
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     body = payload.to_dict() if hasattr(payload, "to_dict") else dict(payload)
-    result: dict[str, Any] = {
+    result = {
         "schema_version": "1.0",
         "operation_id": operation_id,
         "target": target.to_dict(),

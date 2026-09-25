@@ -23,6 +23,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_link_libraries(${PROJECT_NAME} PUBLIC nlohmann_json::nlohmann_json PRIVATE ${CMAKE_DL_LIBS})
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8)
+  target_link_libraries(${PROJECT_NAME} PRIVATE stdc++fs)
+endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION 1)
 
 install(TARGETS ${PROJECT_NAME} EXPORT uran_interfacesTargets
