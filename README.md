@@ -8,6 +8,12 @@ do not depend on ROS or the URAN Runtime.
 This repository defines semantics only. It does not implement device drivers,
 control algorithms, emergency actions, or claim hardware support.
 
+`schemas/state/snapshot.schema.json` defines the Runtime state document. Its
+`components` array is the authoritative component inventory: each entry is
+identified by `(device_id, component_id)` and lists all plugin instances,
+including components that currently have no state fields. The flat `fields`
+member is retained for consumers that still use the legacy state view.
+
 ## Build and test
 
 ```bash
@@ -21,4 +27,3 @@ python3 -m venv /tmp/uran-interfaces-venv
 
 The CMake install exports `uran_interfaces::uran_interfaces`. The Python import
 is `uran_interfaces`; the CLI is `uran-contract-validate`.
-

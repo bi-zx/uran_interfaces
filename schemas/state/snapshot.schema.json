@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:state:snapshot:1.0",
+  "title": "URAN runtime state snapshot",
+  "type": "object",
+  "required": ["schema_version", "timestamp_ns", "components", "fields"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "device_id": {"type": "string"},
+    "timestamp_ns": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "reason": {"type": "string"},
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["device_id", "component_id", "instances", "fields"],
+        "properties": {
+          "device_id": {"type": "string", "minLength": 1},
+          "component_id": {"type": "string", "minLength": 1},
+          "instances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["instance_id", "status", "health", "capabilities"],
+              "properties": {
+                "instance_id": {"type": "string", "minLength": 1},
+                "status": {"enum": ["unloaded", "loaded", "configured", "active", "inactive", "error"]},
+                "health": {"enum": ["unknown", "starting", "healthy", "degraded", "error", "stopped"]},
+                "health_message": {"type": "string"},
+                "error": {"type": "string"},
+                "error_count": {"type": "integer", "minimum": 0},
+                "capabilities": {"type": "array", "items": {"type": "string"}}
+              },
+              "additionalProperties": false
+            }
+          },
+          "fields": {"type": "object"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "unscoped_fields": {"type": "object"},
+    "fields": {"type": "object"}
+  },
+  "additionalProperties": false
+}
