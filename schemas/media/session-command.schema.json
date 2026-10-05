@@ -14,7 +14,11 @@
     "signal": {
       "type": "object",
       "properties": {
+        "type": {"enum": ["offer", "answer", "candidate"]},
         "sdp": {"type": "string"},
+        "sdpMid": {"type": "string"},
+        "sdpMLineIndex": {"type": "integer", "minimum": 0},
+        "candidate": {"type": "string"},
         "ice_candidates": {"type": "array", "items": {"type": "string"}}
       },
       "additionalProperties": false
