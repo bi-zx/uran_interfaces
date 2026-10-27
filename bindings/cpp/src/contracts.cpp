@@ -164,13 +164,6 @@ void validate_semantics(const std::string & name, const Json & document, Issues 
       document.at("valid_until_ns").get<std::uint64_t>() <= document.at("issued_at_ns").get<std::uint64_t>()) {
       add(issues, "/valid_until_ns", "must be later than issued_at_ns");
     }
-    if (document.contains("payload") && document.at("payload").value("kind", "") == "arm_joints") {
-      const auto & payload = document.at("payload");
-      if (payload.contains("joint_names") && payload.contains("positions_rad") &&
-        payload.at("joint_names").size() != payload.at("positions_rad").size()) {
-        add(issues, "/payload/positions_rad", "must have the same length as joint_names");
-      }
-    }
   } else if (name == "components/control-lease.schema.json") {
     if (document.contains("acquired_at_ns") && document.contains("expires_at_ns") &&
       document.at("expires_at_ns").get<std::uint64_t>() <= document.at("acquired_at_ns").get<std::uint64_t>()) {

@@ -17,9 +17,9 @@
       "oneOf": [
         {"$ref": "urn:uran:interfaces:motion:base-velocity:1.0"},
         {"$ref": "urn:uran:interfaces:motion:base-posture:1.0"},
-        {"$ref": "urn:uran:interfaces:motion:arm-joints:1.0"},
         {"$ref": "urn:uran:interfaces:motion:arm-pose:1.0"},
-        {"$ref": "urn:uran:interfaces:motion:gripper-position:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:arm-cartesian-velocity:1.0"},
+        {"$ref": "urn:uran:interfaces:motion:gripper-action:1.0"},
         {"$ref": "urn:uran:interfaces:motion:safety-action:1.0"}
       ]
     },

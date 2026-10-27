@@ -83,8 +83,6 @@ class ContractValidator:
             if document["valid_until_ns"] <= document["issued_at_ns"]:
                 raise ContractError("valid_until_ns must be later than issued_at_ns")
             payload = document["payload"]
-            if payload["kind"] == "arm_joints" and len(payload["joint_names"]) != len(payload["positions_rad"]):
-                raise ContractError("joint_names and positions_rad must have equal length")
         elif schema_name == "components/control-lease.schema.json":
             if document["expires_at_ns"] <= document["acquired_at_ns"]:
                 raise ContractError("expires_at_ns must be later than acquired_at_ns")
