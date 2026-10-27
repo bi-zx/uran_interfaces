@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:management:command:1.0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "kind",
+    "request_id",
+    "device_id",
+    "actor_id",
+    "issued_at",
+    "expires_at",
+    "action",
+    "args"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "command"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+    },
+    "device_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+    },
+    "actor_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+    },
+    "issued_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "expires_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "action": {
+      "enum": [
+        "deployment.plan",
+        "deployment.apply",
+        "deployment.rollback",
+        "deployment.status",
+        "maintenance.open",
+        "maintenance.close",
+        "authorization.revoke",
+        "deployment.cancel"
+      ]
+    },
+    "args": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "action": {
+          "enum": [
+            "deployment.plan",
+            "deployment.apply"
+          ]
+        },
+        "args": {
+          "type": "object",
+          "required": [
+            "release"
+          ],
+          "properties": {
+            "release": {
+              "$ref": "urn:uran:interfaces:management:signed-release:1.0"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "action": {
+          "enum": [
+            "deployment.rollback"
+          ]
+        },
+        "args": {
+          "type": "object",
+          "required": [
+            "release_id",
+            "restore_state"
+          ],
+          "properties": {
+            "release_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "restore_state": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "action": {
+          "enum": [
+            "deployment.status",
+            "deployment.cancel"
+          ]
+        },
+        "args": {
+          "type": "object",
+          "required": [
+            "request_id"
+          ],
+          "properties": {
+            "request_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "action": {
+          "enum": [
+            "maintenance.open"
+          ]
+        },
+        "args": {
+          "type": "object",
+          "required": [
+            "service_id",
+            "ssh_public_key"
+          ],
+          "properties": {
+            "service_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            "ssh_public_key": {
+              "type": "string",
+              "maxLength": 16384,
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "action": {
+          "enum": [
+            "maintenance.close"
+          ]
+        },
+        "args": {
+          "type": "object",
+          "required": [],
+          "properties": {},
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "properties": {
+        "action": {
+          "enum": [
+            "authorization.revoke"
+          ]
+        },
+        "args": {
+          "type": "object",
+          "required": [
+            "grant_id"
+          ],
+          "properties": {
+            "grant_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

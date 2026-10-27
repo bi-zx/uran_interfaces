@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:management:signed-command:1.0",
+  "type": "object",
+  "required": [
+    "algorithm",
+    "key_id",
+    "payload",
+    "signature"
+  ],
+  "properties": {
+    "algorithm": {
+      "const": "rsa-sha256"
+    },
+    "key_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+    },
+    "payload": {
+      "$ref": "urn:uran:interfaces:management:command:1.0"
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 1,
+      "contentEncoding": "base64"
+    },
+    "grant": {
+      "$ref": "urn:uran:interfaces:management:signed-grant:1.0"
+    }
+  },
+  "additionalProperties": false
+}

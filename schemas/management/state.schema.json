@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:management:state:1.0",
+  "type": "object",
+  "required": [
+    "request_id",
+    "actor_id",
+    "action",
+    "phase",
+    "status",
+    "updated_at",
+    "schema_version"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+    },
+    "actor_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+    },
+    "action": {
+      "enum": [
+        "deployment.plan",
+        "deployment.apply",
+        "deployment.rollback",
+        "deployment.status",
+        "maintenance.open",
+        "maintenance.close",
+        "authorization.revoke",
+        "deployment.cancel"
+      ]
+    },
+    "phase": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "accepted",
+        "running",
+        "succeeded",
+        "failed",
+        "recovery_failed",
+        "rejected",
+        "cancelled"
+      ]
+    },
+    "updated_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "result": {
+      "type": "object"
+    },
+    "error": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0"
+    }
+  },
+  "additionalProperties": false
+}

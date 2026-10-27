@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <set>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 #if defined(__unix__) || defined(__APPLE__)
@@ -145,6 +146,14 @@ void validate_node(const Json & schema, const Json & value,
     value.get_ref<const std::string &>().size() < schema.at("minLength").get<std::size_t>()) {
     add(issues, path, "string is too short");
   }
+  if (value.is_string() && schema.contains("maxLength") &&
+    value.get_ref<const std::string &>().size() > schema.at("maxLength").get<std::size_t>()) {
+    add(issues, path, "string is too long");
+  }
+  if (value.is_string() && schema.contains("pattern") &&
+    !std::regex_search(value.get_ref<const std::string &>(), std::regex(schema.at("pattern").get<std::string>()))) {
+    add(issues, path, "string does not match pattern");
+  }
   if (value.is_number() && !value.is_boolean()) {
     const long double number = value.get<long double>();
     if (!std::isfinite(number)) {add(issues, path, "number must be finite");}
@@ -159,7 +168,20 @@ void validate_node(const Json & schema, const Json & value,
 
 void validate_semantics(const std::string & name, const Json & document, Issues & issues)
 {
-  if (name == "motion/command.schema.json") {
+  if (name == "management/command.schema.json" || name == "management/grant.schema.json") {
+    if (document.contains("issued_at") && document.contains("expires_at") &&
+      document.at("expires_at").get<std::uint64_t>() <= document.at("issued_at").get<std::uint64_t>()) {
+      add(issues, "/expires_at", "must be later than issued_at");
+    }
+  } else if (name == "management/signed-command.schema.json" || name == "management/signed-grant.schema.json") {
+    if (document.contains("payload")) {
+      validate_semantics(name == "management/signed-command.schema.json" ?
+        "management/command.schema.json" : "management/grant.schema.json", document.at("payload"), issues);
+    }
+    if (document.contains("grant")) {
+      validate_semantics("management/signed-grant.schema.json", document.at("grant"), issues);
+    }
+  } else if (name == "motion/command.schema.json") {
     if (document.contains("issued_at_ns") && document.contains("valid_until_ns") &&
       document.at("valid_until_ns").get<std::uint64_t>() <= document.at("issued_at_ns").get<std::uint64_t>()) {
       add(issues, "/valid_until_ns", "must be later than issued_at_ns");

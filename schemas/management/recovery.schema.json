@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uran:interfaces:management:recovery:1.0",
+  "title": "Management-only recovery status",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "mode",
+    "failed_release",
+    "running_release",
+    "reason",
+    "product_runtime_started"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "mode": {
+      "enum": [
+        "normal",
+        "management_recovery"
+      ]
+    },
+    "failed_release": {
+      "type": "string"
+    },
+    "running_release": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "product_runtime_started": {
+      "type": "boolean"
+    }
+  }
+}

@@ -79,7 +79,16 @@ class ContractValidator:
 
     @staticmethod
     def _semantic_validate(schema_name: str, document: Mapping[str, Any]) -> None:
-        if schema_name == "motion/command.schema.json":
+        if schema_name in {"management/command.schema.json", "management/grant.schema.json"}:
+            if document["expires_at"] <= document["issued_at"]:
+                raise ContractError("expires_at must be later than issued_at")
+        elif schema_name in {"management/signed-command.schema.json", "management/signed-grant.schema.json"}:
+            ContractValidator._semantic_validate(
+                "management/command.schema.json" if "signed-command" in schema_name
+                else "management/grant.schema.json", document["payload"])
+            if "grant" in document:
+                ContractValidator._semantic_validate("management/signed-grant.schema.json", document["grant"])
+        elif schema_name == "motion/command.schema.json":
             if document["valid_until_ns"] <= document["issued_at_ns"]:
                 raise ContractError("valid_until_ns must be later than issued_at_ns")
             payload = document["payload"]

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "kind": "command",
+  "request_id": "deploy-1",
+  "device_id": "robot_001",
+  "actor_id": "agent_1",
+  "issued_at": 1793059200,
+  "expires_at": 1793059500,
+  "action": "shell.exec",
+  "args": {
+    "command": "uname -a"
+  }
+}

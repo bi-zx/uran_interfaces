@@ -8,6 +8,12 @@ do not depend on ROS or the URAN Runtime.
 This repository defines semantics only. It does not implement device drivers,
 control algorithms, emergency actions, or claim hardware support.
 
+`schemas/management/` defines signed deployment commands, concrete-request human
+grants, publisher release descriptors and durable task state. Schema validation
+checks structure and semantic time ordering; signature verification, role trust,
+expiry at the device and policy enforcement are implemented by the framework
+deployment supervisor. Management timestamps are full Unix seconds.
+
 `schemas/state/snapshot.schema.json` defines the Runtime state document. Its
 `components` array is the authoritative component inventory: each entry is
 identified by `(device_id, component_id)` and lists all plugin instances,

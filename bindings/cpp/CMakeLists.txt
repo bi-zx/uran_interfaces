@@ -7,10 +7,12 @@ find_package(nlohmann_json 3.10 REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
 set(generated_include ${CMAKE_CURRENT_BINARY_DIR}/generated/uran_interfaces/generated_catalog.hpp)
+file(GLOB_RECURSE catalog_schemas CONFIGURE_DEPENDS
+  "${CMAKE_CURRENT_SOURCE_DIR}/../../schemas/*.schema.json")
 add_custom_command(OUTPUT ${generated_include}
   COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../../generators/generate_catalog.py
     --schemas ${CMAKE_CURRENT_SOURCE_DIR}/../../schemas --cpp ${generated_include}
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../../generators/generate_catalog.py
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../../generators/generate_catalog.py ${catalog_schemas}
   COMMENT "Generating URAN schema catalog")
 add_custom_target(uran_interfaces_generate_catalog DEPENDS ${generated_include})
 
